@@ -6,3 +6,4 @@ FROM '../data/raw/raw_job_postings_*.parquet'
 WHERE error IS NULL
 GROUP BY company_name
 ORDER BY postings DESC
+LIMIT 50
