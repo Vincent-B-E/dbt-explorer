@@ -68,3 +68,15 @@ models:
     columns:
       - name: role
         description: The role searched for Data Analyst, Data Engineer or Data Scientist.
+
+  - name: skills_by_role
+    description: "Distinct jobs per skill keyword, per role."
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: role
+        description: "The role searched for: Data Analyst, Data Engineer or Data Scientist."
+      - name: skill_keyword
+        description: "Skill keyword, for example sql or python."
