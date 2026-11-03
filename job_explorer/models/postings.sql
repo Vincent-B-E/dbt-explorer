@@ -8,5 +8,5 @@ SELECT
     job_salary, 
     search_term, 
     search_date
-FROM '../data/raw/raw_job_postings_*.parquet'
+FROM {{ source('raw', 'job_postings') }}
 WHERE error IS NULL

@@ -1,0 +1,70 @@
+models:
+  - name: postings
+    description: Base model. One row per clean scrape of a job posting (error rows removed).
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: job_id
+        description: Posting ID from the source. Repeats when a job is scraped again.
+
+  - name: top_companies
+    description: Top 50 employers by posting count. Six job boards (Jobs via Dice, beBeeData, Online Surveys, ExecutivePlacements.com, The Elite Job, VirtualVocations) are filtered out because they repost jobs for other firms.
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: company_name
+        description: Hiring company (the six job boards removed).
+
+  - name: platform_share
+    description: Postings per job platform, with the 'via ' prefix removed.
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: platform
+        description: Job platform name without the 'via ' prefix.
+
+  - name: salary_posts
+    description: Postings that show a salary, with the pay period parsed from the text.
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: job_id
+        description: Posting ID of a posting that shows a salary.
+
+  - name: remote_by_role
+    description: Percent of postings that are remote, per role.
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: role
+        description: The role searched for Data Analyst, Data Engineer or Data Scientist.
+
+  - name: top_skills
+    description: Distinct jobs that mention each skill keyword, read straight from the skills source.
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: skill_keyword
+        description: Skill keyword, for example sql or python.
+  
+  - name: role_scorecard
+    description: One row per role. Compare postings, percent remote share and percent that list a salary.
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: role
+        description: The role searched for Data Analyst, Data Engineer or Data Scientist.
