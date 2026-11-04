@@ -8,7 +8,7 @@ models:
     columns:
       - name: job_id
         description: Posting ID from the source. Repeats when a job is scraped again.
-
+          
   - name: top_companies
     description: Top 50 employers by posting count. Six job boards (Jobs via Dice, beBeeData, Online Surveys, ExecutivePlacements.com, The Elite Job, VirtualVocations) are filtered out because they repost jobs for other firms.
     config:
@@ -18,6 +18,9 @@ models:
     columns:
       - name: company_name
         description: Hiring company (the six job boards removed).
+        data_tests:
+          - not_null
+          - unique
 
   - name: platform_share
     description: Postings per job platform, with the 'via ' prefix removed.
@@ -28,6 +31,9 @@ models:
     columns:
       - name: platform
         description: Job platform name without the 'via ' prefix.
+        data_tests:
+          - not_null
+          - unique
 
   - name: salary_posts
     description: Postings that show a salary, with the pay period parsed from the text.
@@ -38,7 +44,11 @@ models:
     columns:
       - name: job_id
         description: Posting ID of a posting that shows a salary.
-
+      - name: pay_period
+        description: yearly or hourly
+        data_tests:
+          - not_null
+           
   - name: remote_by_role
     description: Percent of postings that are remote, per role.
     config:
@@ -48,6 +58,9 @@ models:
     columns:
       - name: role
         description: The role searched for Data Analyst, Data Engineer or Data Scientist.
+        data_tests:
+          - not_null
+          - unique
 
   - name: top_skills
     description: Distinct jobs that mention each skill keyword, read straight from the skills source.
@@ -58,7 +71,10 @@ models:
     columns:
       - name: skill_keyword
         description: Skill keyword, for example sql or python.
-  
+        data_tests:
+          - not_null
+          - unique
+
   - name: role_scorecard
     description: One row per role. Compare postings, percent remote share and percent that list a salary.
     config:
@@ -68,7 +84,10 @@ models:
     columns:
       - name: role
         description: The role searched for Data Analyst, Data Engineer or Data Scientist.
-
+        data_tests:
+          - not_null
+          - unique
+                  
   - name: skills_by_role
     description: "Distinct jobs per skill keyword, per role."
     config:
@@ -80,3 +99,14 @@ models:
         description: "The role searched for: Data Analyst, Data Engineer or Data Scientist."
       - name: skill_keyword
         description: "Skill keyword, for example sql or python."
+      - name: role_skill
+        data_tests:
+          - not_null
+          - unique
+
+  - name: schedule_mix
+    columns:
+      - name: schedule
+        data_tests:
+          - not_null
+          - unique

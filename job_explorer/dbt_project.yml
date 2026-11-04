@@ -8,3 +8,9 @@ macro-paths: ["macros"]
 clean-targets:
   - "target"
   - "dbt_packages"
+
+models:
+  job_explorer:
+    +materialized: table
+    menu:
+      +materialized: view

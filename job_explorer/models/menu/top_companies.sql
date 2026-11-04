@@ -1,3 +1,6 @@
+{{ config(materialized="table") }}
+
+
 {% set top_n = 50 %}
 -- Who hires the most data people? One row per company.
 SELECT
