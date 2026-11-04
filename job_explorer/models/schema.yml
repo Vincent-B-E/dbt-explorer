@@ -8,7 +8,22 @@ models:
     columns:
       - name: job_id
         description: Posting ID from the source. Repeats when a job is scraped again.
-          
+
+  - name: jobs_monthly
+    description: Monthly posting counts by role.
+    config:
+      persist_docs:
+        relation: true
+        columns: true    
+    columns:
+      - name: month
+        description: Posting month, truncated from search_date.
+      - name: role
+        description: Search role (search_term).
+      - name: total_postings
+        description: Postings counted for the role that month.
+
+
   - name: top_companies
     description: Top 50 employers by posting count. Six job boards (Jobs via Dice, beBeeData, Online Surveys, ExecutivePlacements.com, The Elite Job, VirtualVocations) are filtered out because they repost jobs for other firms.
     config:
