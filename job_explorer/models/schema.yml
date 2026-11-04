@@ -18,8 +18,6 @@ models:
     columns:
       - name: month
         description: Posting month, truncated from search_date.
-      - name: role
-        description: Search role (search_term).
       - name: total_postings
         description: Postings counted for the role that month.
 
