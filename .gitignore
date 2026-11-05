@@ -20,7 +20,3 @@ logs/
 
 # dbt generated files
 .user.yml
-
-# dbt docs assets and schema
-docs/assets
-docs/info_schema
