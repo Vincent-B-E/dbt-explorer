@@ -2,6 +2,9 @@ name: dbt build & publish
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
   schedule:
     - cron: '17 6 6 * *'    # the 6th of each month: the new supporter month lands by the 5th
   workflow_dispatch:        # …and a manual Run button

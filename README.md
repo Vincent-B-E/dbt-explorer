@@ -15,8 +15,8 @@ A public dbt + DuckDB pipeline over ~692k real job postings, rebuilt and republi
 | --- | --- | --- |
 | **dbt pipeline** | sources → cleaned model → insight marts | [`job_explorer/models/`](job_explorer/models/) |
 | **Data tests** | `unique` / `not_null` on every mart grain | [`schema.yml`](analytics/models/schema.yml) |
-| **Hosted dbt docs** | lineage, descriptions, column tests | [Live docs site](https://lukebarousse.github.io/dbt_Analytics_Engineering_Course/project1/) |
-| **Public CI** | build + test + publish on every push | [Actions workflow](https://github.com/lukebarousse/dbt_Analytics_Engineering_Course/actions/workflows/dbt_build.yml) |
+| **Hosted dbt docs** | lineage, descriptions, column tests | [Live docs site](https://vincent-b-e.github.io/dbt-explorer/) |
+| **Public CI** | build + test + publish on every push | [Actions workflow](https://github.com/Vincent-B-E/dbt-explorer/actions) |
 | **Environments** | local `dev` vs CI `prod` targets | [`ci/profiles.yml`](ci/profiles.yml) |
 | **Published warehouse** | one `ATTACH`, queryable by anyone | [Query it](#query-the-published-warehouse) |
 
@@ -31,7 +31,7 @@ And the dbt features doing the work:
 
 | dbt Feature | How I Used It |
 | --- | --- |
-| Declared sources (no hardcoded paths in SQL) | [`sources.yml`](job_explorer/models/sources.yml) + `source('raw', 'job_postings')` |
+| Declared sources (no hardcoded paths in SQL) | [`sources.yml`](job_explorer/models/sources.yml) + `source('raw', 'postings')` + `source('raw', 'job_skills')` |
 | Model dependencies | `ref()` everywhere downstream; dbt resolves order and parallelism |
 | Materializations | project default `table`; staging override to `view`; intermediaries override to `ephemeral` | 
 | Data tests | `unique` / `not_null` on mart grains in [`schema.yml`](job_explorer/models/schema.yml) |
@@ -80,16 +80,13 @@ SELECT * FROM jobs_monthly;
 
 Docs are generated with `dbt docs generate` and published to GitHub Pages:
 
-**→ [lukebarousse.github.io/dbt_Analytics_Engineering_Course/project1/](https://lukebarousse.github.io/dbt_Analytics_Engineering_Course/project1/)**
+**→ [vincent-b-e.github.io/dbt-explorer/](https://vincent-b-e.github.io/dbt-explorer/)**
 
 The site shows:
 
 - The full **lineage graph** (sources → models → marts), as also shown below
 - **Model and column descriptions** from the YAML
 - Which columns carry **tests**
-
-![dbt pipeline diagram](img/dbt_explorer.png)
-
 
 ## 💻 Run it yourself
 
@@ -115,8 +112,8 @@ uv run dbt docs serve
 ├── ci/profiles.yml                   # prod DuckDB target for Actions
 ├── data/                             # raw + warehouses (gitignored; CI regenerates)
 ├── docs/                             # dbt docs site (GitHub Pages)
-├── analytics/
+├── job_explorer/
 │   ├── dbt_project.yml
-│   └── models/                       # sources, staging, marts, schema.yml
+│   └── models/                       # sources, staging, marts, schema.yml, ...
 └── scripts/download_data.py          # fetch raw parquet before build
 ```
