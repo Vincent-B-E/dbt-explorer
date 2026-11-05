@@ -1,5 +1,3 @@
-{{ config(materialized="view") }}
-
 SELECT
     job_id,
     job_title, 

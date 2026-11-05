@@ -1,42 +1,45 @@
 models:
+  # models/ root
   - name: postings
-    description: Base model. One row per clean scrape of a job posting (error rows removed).
+    description: Clean job-posting records, with source error rows removed.
     config:
       persist_docs:
         relation: true
         columns: true
     columns:
       - name: job_id
-        description: Posting ID from the source. Repeats when a job is scraped again.
+        description: Posting ID from the source; it can repeat when a job is scraped more than once.
 
-  - name: jobs_monthly
-    description: Monthly posting counts by role.
-    config:
-      persist_docs:
-        relation: true
-        columns: true    
-    columns:
-      - name: month
-        description: Posting month, truncated from search_date.
-      - name: total_postings
-        description: Postings counted for the role that month.
-
-
-  - name: top_companies
-    description: Top 50 employers by posting count. Six job boards (Jobs via Dice, beBeeData, Online Surveys, ExecutivePlacements.com, The Elite Job, VirtualVocations) are filtered out because they repost jobs for other firms.
+  - name: top_skills
+    description: Count of distinct postings mentioning each skill keyword.
     config:
       persist_docs:
         relation: true
         columns: true
     columns:
-      - name: company_name
-        description: Hiring company (the six job boards removed).
+      - name: skill_keyword
+        description: Skill keyword, such as SQL or Python.
         data_tests:
           - not_null
           - unique
+      - name: jobs
+        description: Number of distinct postings mentioning the skill.
+
+  # models/menu/
+  - name: jobs_monthly
+    description: Total posting count by month.
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: month
+        description: Month of the posting, truncated from search_date.
+      - name: total_postings
+        description: Number of postings in the month.
 
   - name: platform_share
-    description: Postings per job platform, with the 'via ' prefix removed.
+    description: Posting counts by platform, with the 'via ' prefix removed.
     config:
       persist_docs:
         relation: true
@@ -47,79 +50,106 @@ models:
         data_tests:
           - not_null
           - unique
+      - name: postings
+        description: Number of postings attributed to the platform.
 
+  - name: schedule_mix
+    description: Posting counts by schedule type; missing schedule types are labeled 'Not specified'.
+    columns:
+      - name: schedule
+        data_tests:
+          - not_null
+          - unique
+      - name: postings
+        description: Number of postings with this schedule type.
+
+  - name: top_companies
+    description: Top 50 employers by posting count, excluding job boards that repost listings for other firms.
+    config:
+      persist_docs:
+        relation: true
+        columns: true
+    columns:
+      - name: company_name
+        description: Hiring company, excluding the filtered job boards.
+        data_tests:
+          - not_null
+          - unique
+      - name: postings
+        description: Number of postings attributed to the company.
+
+  # models/role_scorecard/
   - name: salary_posts
-    description: Postings that show a salary, with the pay period parsed from the text.
+    description: Postings with a listed salary, including the parsed pay period.
     config:
       persist_docs:
         relation: true
         columns: true
     columns:
       - name: job_id
-        description: Posting ID of a posting that shows a salary.
+        description: Posting ID for a posting that lists a salary.
+      - name: role
+        description: Role searched for in the posting data.
+      - name: company_name
+        description: Company listed on the posting.
+      - name: job_salary
+        description: Original salary text from the posting.
       - name: pay_period
-        description: yearly or hourly
+        description: "Parsed salary period: year, hour, day, week, or month."
         data_tests:
           - not_null
-           
-  - name: remote_by_role
-    description: Percent of postings that are remote, per role.
+
+  - name: skills_by_role
+    description: Distinct posting counts for each skill keyword and role.
     config:
       persist_docs:
         relation: true
         columns: true
     columns:
       - name: role
-        description: The role searched for Data Analyst, Data Engineer or Data Scientist.
+        description: Role searched for in the posting data.
+      - name: skill_keyword
+        description: Skill keyword, such as SQL or Python.
+      - name: role_skill
+        description: Combined role and skill label.
         data_tests:
           - not_null
           - unique
+      - name: jobs
+        description: Number of distinct postings for this role and skill.
 
-  - name: top_skills
-    description: Distinct jobs that mention each skill keyword, read straight from the skills source.
+  - name: remote_by_role
+    description: Percentage of postings marked as remote, grouped by role.
     config:
       persist_docs:
         relation: true
         columns: true
     columns:
-      - name: skill_keyword
-        description: Skill keyword, for example sql or python.
+      - name: role
+        description: Role searched for in the posting data.
         data_tests:
           - not_null
           - unique
+      - name: pct_remote
+        description: Percentage of postings marked as remote.
 
   - name: role_scorecard
-    description: One row per role. Compare postings, percent remote share and percent that list a salary.
+    description: One row per role, comparing posting volume, remote share, salary availability, and most-mentioned skill.
     config:
       persist_docs:
         relation: true
         columns: true
     columns:
       - name: role
-        description: The role searched for Data Analyst, Data Engineer or Data Scientist.
+        description: Role searched for in the posting data.
         data_tests:
           - not_null
           - unique
-                  
-  - name: skills_by_role
-    description: "Distinct jobs per skill keyword, per role."
-    config:
-      persist_docs:
-        relation: true
-        columns: true
-    columns:
-      - name: role
-        description: "The role searched for: Data Analyst, Data Engineer or Data Scientist."
-      - name: skill_keyword
-        description: "Skill keyword, for example sql or python."
-      - name: role_skill
-        data_tests:
-          - not_null
-          - unique
-
-  - name: schedule_mix
-    columns:
-      - name: schedule
-        data_tests:
-          - not_null
-          - unique
+      - name: postings
+        description: Number of postings for the role.
+      - name: pct_remote
+        description: Percentage of postings marked as remote.
+      - name: pct_with_salary
+        description: Percentage of postings that list a salary.
+      - name: top_skill
+        description: Skill keyword with the highest posting count for the role.

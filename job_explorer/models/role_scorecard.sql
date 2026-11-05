@@ -1,3 +1,5 @@
+{{ config(materialized="table") }}
+
 WITH totals AS (
     SELECT search_term AS role, COUNT(*) AS postings
     FROM {{ ref('postings') }}

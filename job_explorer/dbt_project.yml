@@ -11,6 +11,8 @@ clean-targets:
 
 models:
   job_explorer:
-    +materialized: table
+    +materialized: view
     role_scorecard:
-      +materialized: view
+      +materialized: ephemeral
+    menu:
+      +materialized: table

@@ -1,5 +1,3 @@
-{{ config(materialized="ephemeral") }}
-
 SELECT
     job_id,
     search_term AS role,

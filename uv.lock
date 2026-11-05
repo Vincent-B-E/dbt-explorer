@@ -12,7 +12,7 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/11/27/48a6a7fda183c55d82ac0ab393b21dc742f6ef3e17b2c2fd233fd20c0c4d/dbt-2.0.9.tar.gz", hash = "sha256:791946056d520147925c2057a1935975d82b555cd0a4d7e729b31a647f868d45", size = 3296, upload-time = "2026-10-19T22:40:22.851Z" }
 
 [[package]]
-name = "lb-dbt-explorer"
+name = "dbt-explorer"
 version = "0.1.0"
 source = { editable = "." }
 dependencies = [
